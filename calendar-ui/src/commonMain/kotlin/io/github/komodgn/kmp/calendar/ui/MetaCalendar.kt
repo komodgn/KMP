@@ -1,9 +1,15 @@
 package io.github.komodgn.kmp.calendar.ui
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,6 +18,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,20 +35,59 @@ import androidx.compose.ui.unit.dp
 import io.github.komodgn.kmp.calendar.core.CalendarEngine
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.number
 
 @Composable
 fun MetaCalendar(
     modifier: Modifier = Modifier,
-    year: Int,
-    month: Month,
+    initialYear: Int,
+    initialMonth: Month,
     onDayClick: (LocalDate) -> Unit = {},
 ) {
-    val days = remember(year, month) { CalendarEngine().getDaysInMonth(year, month) }
+    var currentYear by remember { mutableStateOf(initialYear) }
+    var currentMonth by remember { mutableStateOf(initialMonth) }
+
+    val days = remember(currentYear, currentMonth) {
+        CalendarEngine().getDaysInMonth(currentYear, currentMonth)
+    }
 
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
     Column(modifier.padding(16.dp)) {
-        Text("$month $year", style = MaterialTheme.typography.headlineSmall)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(onClick = {
+                if (currentMonth == Month.JANUARY) {
+                    currentMonth = Month.DECEMBER
+                    currentYear -= 1
+                } else {
+                    currentMonth = Month(currentMonth.number - 1)
+                }
+            }) {
+                Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Previous Month")
+            }
+
+            Text(
+                text = "${currentMonth.name} $currentYear",
+                style = MaterialTheme.typography.headlineSmall
+            )
+
+            IconButton(onClick = {
+                if (currentMonth == Month.DECEMBER) {
+                    currentMonth = Month.JANUARY
+                    currentYear += 1
+                } else {
+                    currentMonth = Month(currentMonth.number + 1)
+                }
+            }) {
+                Icon(Icons.Default.KeyboardArrowRight, contentDescription = "Next Month")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         LazyVerticalGrid(
             columns = GridCells.Fixed(7),

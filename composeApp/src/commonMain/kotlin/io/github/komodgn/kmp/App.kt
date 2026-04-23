@@ -26,8 +26,8 @@ fun App() {
         ) { innerPadding ->
             MetaCalendar(
                 modifier = Modifier.padding(innerPadding),
-                year = 2026,
-                month = Month.APRIL,
+                initialYear = 2026,
+                initialMonth = Month.APRIL,
                 onDayClick = { date ->
                     scope.launch {
                         snackbarHostState.showSnackbar("Select ${date.dayOfMonth}")
