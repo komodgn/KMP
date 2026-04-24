@@ -1,4 +1,5 @@
 plugins {
+    id("maven-publish")
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidKotlinMultiplatformLibrary)
     alias(libs.plugins.androidLint)
@@ -118,4 +119,18 @@ kotlin {
         }
     }
 
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "io.github.komodgn"
+            artifactId = "calendar-ui"
+            version = "0.1.0"
+
+            afterEvaluate {
+                from(components["kotlin"])
+            }
+        }
+    }
 }
