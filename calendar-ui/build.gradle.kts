@@ -112,10 +112,9 @@ kotlin {
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
+        withType<MavenPublication> {
             groupId = "io.github.komodgn"
-            artifactId = "calendar-ui"
-            version = "0.1.2"
+            version = "0.1.3"
 
             afterEvaluate {
                 from(components["kotlin"])
@@ -128,7 +127,7 @@ publishing {
                     val depNode = dependenciesNode.appendNode("dependency")
                     depNode.appendNode("groupId", "io.github.komodgn")
                     depNode.appendNode("artifactId", "calendar-core")
-                    depNode.appendNode("version", "0.1.1")
+                    depNode.appendNode("version", "0.1.3")
                     depNode.appendNode("scope", "compile")
                 }
             }

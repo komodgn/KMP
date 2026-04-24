@@ -103,10 +103,9 @@ kotlin {
 
 publishing {
     publications {
-        create<MavenPublication>("maven") {
-            groupId = "io.github.komodgn"
-            artifactId = "calendar-core"
-            version = "0.1.2"
+        withType<MavenPublication> {
+            groupId = "io.github.komodgn" 
+            version = "0.1.3"
 
             afterEvaluate {
                 from(components["kotlin"])
