@@ -71,7 +71,7 @@ kotlin {
                 implementation(libs.compose.components.resources)
                 implementation(compose.materialIconsExtended)
 
-                api("io.github.komodgn:calendar-core:0.1.6")
+                api(project(":calendar-core"))
             }
         }
 
@@ -114,7 +114,7 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = "io.github.komodgn"
-            version = "0.1.6"
+            version = "0.1.7"
         }
     }
 }
