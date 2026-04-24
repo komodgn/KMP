@@ -104,12 +104,8 @@ kotlin {
 publishing {
     publications {
         withType<MavenPublication> {
-            groupId = "io.github.komodgn" 
-            version = "0.1.3"
-
-            afterEvaluate {
-                from(components["kotlin"])
-            }
+            groupId = "io.github.komodgn"
+            version = "0.1.4"
         }
     }
 }

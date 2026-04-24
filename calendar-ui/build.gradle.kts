@@ -114,12 +114,8 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = "io.github.komodgn"
-            version = "0.1.3"
-
-            afterEvaluate {
-                from(components["kotlin"])
-            }
-
+            version = "0.1.4"
+            
             pom {
                 withXml {
                     val dependenciesNode = asNode().appendNode("dependencies")
@@ -127,7 +123,7 @@ publishing {
                     val depNode = dependenciesNode.appendNode("dependency")
                     depNode.appendNode("groupId", "io.github.komodgn")
                     depNode.appendNode("artifactId", "calendar-core")
-                    depNode.appendNode("version", "0.1.3")
+                    depNode.appendNode("version", "0.1.4")
                     depNode.appendNode("scope", "compile")
                 }
             }
