@@ -71,7 +71,7 @@ kotlin {
                 implementation(libs.compose.components.resources)
                 implementation(compose.materialIconsExtended)
 
-                api(project(":calendar-core"))
+                api("io.github.komodgn:calendar-core:0.1.6")
             }
         }
 
@@ -114,20 +114,7 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = "io.github.komodgn"
-            version = "0.1.5"
-
-            pom {
-                withXml {
-                    val dependenciesNode = asNode().get("dependencies") as? groovy.util.Node
-                        ?: asNode().appendNode("dependencies")
-
-                    val dependency = dependenciesNode.appendNode("dependency")
-                    dependency.appendNode("groupId", "io.github.komodgn")
-                    dependency.appendNode("artifactId", "calendar-core")
-                    dependency.appendNode("version", "0.1.5")
-                    dependency.appendNode("scope", "compile")
-                }
-            }
+            version = "0.1.6"
         }
     }
 }
