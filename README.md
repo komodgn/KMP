@@ -1,3 +1,5 @@
+[![](https://jitpack.io/v/komodgn/kmp.svg)](https://jitpack.io/#komodgn/kmp)  
+
 This is a Kotlin Multiplatform project targeting Android, iOS, Web.
 
 * [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
