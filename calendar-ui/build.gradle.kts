@@ -115,10 +115,22 @@ publishing {
         create<MavenPublication>("maven") {
             groupId = "io.github.komodgn"
             artifactId = "calendar-ui"
-            version = "0.1.0"
+            version = "0.1.2"
 
             afterEvaluate {
                 from(components["kotlin"])
+            }
+
+            pom {
+                withXml {
+                    val dependenciesNode = asNode().appendNode("dependencies")
+
+                    val depNode = dependenciesNode.appendNode("dependency")
+                    depNode.appendNode("groupId", "io.github.komodgn")
+                    depNode.appendNode("artifactId", "calendar-core")
+                    depNode.appendNode("version", "0.1.1")
+                    depNode.appendNode("scope", "compile")
+                }
             }
         }
     }
