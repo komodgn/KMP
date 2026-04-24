@@ -114,17 +114,18 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = "io.github.komodgn"
-            version = "0.1.4"
-            
+            version = "0.1.5"
+
             pom {
                 withXml {
-                    val dependenciesNode = asNode().appendNode("dependencies")
+                    val dependenciesNode = asNode().get("dependencies") as? groovy.util.Node
+                        ?: asNode().appendNode("dependencies")
 
-                    val depNode = dependenciesNode.appendNode("dependency")
-                    depNode.appendNode("groupId", "io.github.komodgn")
-                    depNode.appendNode("artifactId", "calendar-core")
-                    depNode.appendNode("version", "0.1.4")
-                    depNode.appendNode("scope", "compile")
+                    val dependency = dependenciesNode.appendNode("dependency")
+                    dependency.appendNode("groupId", "io.github.komodgn")
+                    dependency.appendNode("artifactId", "calendar-core")
+                    dependency.appendNode("version", "0.1.5")
+                    dependency.appendNode("scope", "compile")
                 }
             }
         }
