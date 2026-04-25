@@ -1,60 +1,90 @@
+# Calendar UI
 [![](https://jitpack.io/v/komodgn/kmp.svg)](https://jitpack.io/#komodgn/kmp)  
 
-This is a Kotlin Multiplatform project targeting Android, iOS, Web.
+### Setup
+Add the dependency below to your module's build.gradle.kts file.
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
+1. Add Repository
+Add the JitPack repository to your root settings.gradle.kts:
 
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+```Kotlin
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") } // Add this
+    }
+}
+```
 
-### Build and Run Android Application
+2. Add Dependency  
+- For Compose Multiplatform projects, add the dependency to your commonMain:
 
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
+```Kotlin
+sourceSets {
+    commonMain.dependencies {
+        // Includes both UI components and core calendar logic
+        implementation("com.github.komodgn.KMP:calendar-ui:$version")
+    }
+}
+```
 
-### Build and Run Web Application
+- For Android-only Projects
 
-To build and run the development version of the web app, use the run configuration from the run widget
-in your IDE's toolbar or run it directly from the terminal:
-- for the Wasm target (faster, modern browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:wasmJsBrowserDevelopmentRun
-    ```
-- for the JS target (slower, supports older browsers):
-  - on macOS/Linux
-    ```shell
-    ./gradlew :composeApp:jsBrowserDevelopmentRun
-    ```
-  - on Windows
-    ```shell
-    .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
-    ```
+```Kotlin
+dependencies {
+    // You can use the same artifact for Android-only projects
+    implementation("com.github.komodgn.KMP:calendar-ui:$version") 
+}
+```
 
-### Build and Run iOS Application
+### Usage
+Load a simple calendar in your Compose Multiplatform screen:
 
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+```Kotlin
+import io.github.komodgn.kmp.calendar.ui.MetaCalendar
+import kotlinx.datetime.Month
 
+MetaCalendar(
+    initialYear = 2026,
+    initialMonth = Month.APRIL,
+    onDayClick = { date ->
+        // date is a kotlinx.datetime.LocalDate object
+        println("Clicked date: ${date.dayOfMonth}")
+    }
+)
+```
+
+### Handling Selection
+You can manage the selected date state and perform actions when a user picks a day:
+
+```Kotlin
+var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
+
+MetaCalendar(
+    initialYear = 2026,
+    initialMonth = Month.APRIL,
+    onDayClick = { date ->
+        selectedDate = date
+        // Navigate or update UI based on selectedDate
+    }
+)
+```
+
+### Customization (Optional)
+Use Modifier to adjust the layout and look of your calendar:
+
+```Kotlin
+MetaCalendar(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
+        .clip(RoundedCornerShape(12.dp)),
+    initialYear = 2026,
+    initialMonth = Month.MAY,
+    onDayClick = { /* Handle click */ }
+)
+```
 ---
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
