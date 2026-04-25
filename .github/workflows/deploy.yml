@@ -20,6 +20,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
       - name: Build Wasm
         run: ./gradlew :composeApp:wasmJsBrowserDistribution
 
