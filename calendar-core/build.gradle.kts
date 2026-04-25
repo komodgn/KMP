@@ -13,7 +13,7 @@ kotlin {
     androidLibrary {
         namespace = "io.github.komodgn.kmp.calendar.core"
         compileSdk = libs.versions.android.compileSdk.get().toInt()
-        minSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
 
         @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
@@ -55,6 +55,17 @@ kotlin {
         binaries.framework {
             baseName = xcfName
         }
+    }
+
+    js {
+        browser()
+        binaries.executable()
+    }
+
+    @OptIn(org.jetbrains.kotlin.gradle.ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
     }
 
     // Source set declarations.
