@@ -71,6 +71,19 @@ MetaCalendar(
 )
 ```
 
+### Scroll Orientation
+Supports scroll behaviors. **The default is `None` (Static).**
+```kotlin
+import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
+
+MetaCalendar(
+    scrollOrientation = CalendarScrollOrientation.Horizontal,
+    initialYear = 2026,
+    initialMonth = Month.APRIL,
+    onDayClick = { /* ... */ }
+)
+```
+
 ### Customization (Optional)
 Use Modifier to adjust the layout and look of your calendar:
 
