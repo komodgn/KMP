@@ -3,6 +3,7 @@ package io.github.komodgn.kmp.calendar.core
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.isoDayNumber
+import kotlinx.datetime.number
 
 fun Month.length(isLeapYear: Boolean): Int {
     return when (this) {
@@ -27,6 +28,22 @@ class CalendarEngine {
         }
 
         return days
+    }
+
+    fun calculateYearMonthFromPage(
+        page: Int,
+        initialPage: Int,
+        initialYear: Int,
+        initialMonth: Month
+    ): Pair<Int, Month> {
+        val diff = page - initialPage
+        val totalMonths = (initialYear * 12 + (initialMonth.number - 1)) + diff
+
+        val year = if (totalMonths >= 0) totalMonths / 12 else (totalMonths - 11) / 12
+        val monthIndex = ((totalMonths % 12) + 12) % 12
+        val month = Month(monthIndex + 1)
+
+        return year to month
     }
 
     private fun isLeapYear(year: Int) = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
