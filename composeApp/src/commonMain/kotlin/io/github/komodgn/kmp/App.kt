@@ -16,6 +16,7 @@
 package io.github.komodgn.kmp
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -28,7 +29,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,18 +42,23 @@ fun App() {
     ) {
         Scaffold(
             snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+            contentWindowInsets = WindowInsets(0, 0, 0, 0),
         ) { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
-                    .padding(16.dp),
+                    .padding(innerPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 DemoLandingPage(
                     onDayClick = { date ->
                         scope.launch {
-                            snackbarHostState.showSnackbar("Selected: $date")
+                            snackbarHostState.showSnackbar("$date")
+                        }
+                    },
+                    onHeaderClick = { year, month ->
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Click the calendar header to trigger a custom event. $year $month")
                         }
                     },
                 )

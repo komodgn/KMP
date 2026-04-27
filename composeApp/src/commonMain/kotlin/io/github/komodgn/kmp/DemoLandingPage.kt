@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -65,28 +66,33 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun DemoLandingPage(
     onDayClick: (LocalDate) -> Unit,
+    onHeaderClick: (year: Int, month: Month) -> Unit = { _, _ -> },
 ) {
     var selectedMode by remember { mutableStateOf(CalendarScrollOrientation.Horizontal) }
     val uriHandler = LocalUriHandler.current
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+            .statusBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         item {
             Column(
-                modifier = Modifier.padding(top = 60.dp, bottom = 20.dp),
+                modifier = Modifier.padding(top = 60.dp, bottom = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = "KMP Playground",
+                    text = "KMP/CMP Playground",
                     style = MaterialTheme.typography.displayLarge.copy(
                         fontWeight = FontWeight.ExtraBold,
                         letterSpacing = (-0.5).sp,
                     ),
+                    textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "Open to contributions!",
                     style = MaterialTheme.typography.headlineSmall,
@@ -112,11 +118,11 @@ fun DemoLandingPage(
                         Image(
                             painter = painterResource(Res.drawable.github),
                             contentDescription = "GitHub",
-                            modifier = Modifier.size(20.dp),
+                            modifier = Modifier.size(30.dp),
                         )
                         Text(
                             text = "View on GitHub",
-                            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                         )
                     }
                 }
@@ -127,12 +133,13 @@ fun DemoLandingPage(
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
                 )
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
 
         item {
             SingleChoiceSegmentedButtonRow(
-                modifier = Modifier.padding(bottom = 32.dp),
+                modifier = Modifier.padding(bottom = 10.dp),
             ) {
                 CalendarScrollOrientation.entries.forEachIndexed { index, mode ->
                     val activeColor = getModeColor(mode)
@@ -153,6 +160,16 @@ fun DemoLandingPage(
                     }
                 }
             }
+
+            Text(
+                text = "Scroll Type",
+                style = MaterialTheme.typography.labelMedium.copy(
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 1.sp,
+                ),
+                color = getModeColor(selectedMode).copy(alpha = 0.8f),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
@@ -171,6 +188,7 @@ fun DemoLandingPage(
                     initialYear = 2026,
                     initialMonth = Month.APRIL,
                     onDayClick = onDayClick,
+                    onHeaderClick = onHeaderClick,
                 )
             }
         }

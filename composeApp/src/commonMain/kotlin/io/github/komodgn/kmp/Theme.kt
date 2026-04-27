@@ -23,11 +23,16 @@ import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 val DarkBackground = Color(0xFF0B0F19)
 val CardBackground = Color(0xFF161B22)
 val NeonGreen = Color(0xFF00E676)
+val NeonRed = Color(0xFFFF5252)
+val NeonYellow = Color(0xFFEEFF41)
 val NeonPurple = Color(0xFFD500F9)
 val NeonBlue = Color(0xFF2979FF)
+val NeonSky = Color(0xFF38BDF8)
 
 internal val CustomColorScheme = darkColorScheme(
-    primary = Color(0xFF38BDF8),
+    primary = NeonSky,
+    primaryContainer = NeonRed.copy(alpha = 0.2f),
+    onPrimaryContainer = NeonRed,
     surface = DarkBackground,
     onSurface = Color.White,
     onSurfaceVariant = Color(0xFF94A3B8),
