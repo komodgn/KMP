@@ -15,6 +15,8 @@
  */
 package io.github.komodgn.kmp.calendar.ui
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +54,7 @@ fun MetaCalendar(
     initialYear: Int,
     initialMonth: Month,
     onDayClick: (LocalDate) -> Unit = {},
+    onHeaderClick: (year: Int, month: Month) -> Unit = { _, _ -> },
 ) {
     var currentYear by remember { mutableStateOf(initialYear) }
     var currentMonth by remember { mutableStateOf(initialMonth) }
@@ -87,6 +90,13 @@ fun MetaCalendar(
                     }
 
                     Text(
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                onHeaderClick(currentYear, currentMonth)
+                            },
                         text = "${currentMonth.name} $currentYear",
                         style = MaterialTheme.typography.headlineSmall,
                     )
@@ -134,6 +144,13 @@ fun MetaCalendar(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                onHeaderClick(headerYear, headerMonth)
+                            },
                         text = "${headerMonth.name} $headerYear",
                         style = MaterialTheme.typography.headlineSmall,
                     )
