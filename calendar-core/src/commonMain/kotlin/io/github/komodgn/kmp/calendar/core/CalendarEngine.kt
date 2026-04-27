@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2026 komodgn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.komodgn.kmp.calendar.core
 
 import kotlinx.datetime.LocalDate
@@ -5,12 +20,10 @@ import kotlinx.datetime.Month
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
 
-fun Month.length(isLeapYear: Boolean): Int {
-    return when (this) {
-        Month.FEBRUARY -> if (isLeapYear) 29 else 28
-        Month.APRIL, Month.JUNE, Month.SEPTEMBER, Month.NOVEMBER -> 30
-        else -> 31
-    }
+fun Month.length(isLeapYear: Boolean): Int = when (this) {
+    Month.FEBRUARY -> if (isLeapYear) 29 else 28
+    Month.APRIL, Month.JUNE, Month.SEPTEMBER, Month.NOVEMBER -> 30
+    else -> 31
 }
 
 class CalendarEngine {
@@ -34,7 +47,7 @@ class CalendarEngine {
         page: Int,
         initialPage: Int,
         initialYear: Int,
-        initialMonth: Month
+        initialMonth: Month,
     ): Pair<Int, Month> {
         val diff = page - initialPage
         val totalMonths = (initialYear * 12 + (initialMonth.number - 1)) + diff

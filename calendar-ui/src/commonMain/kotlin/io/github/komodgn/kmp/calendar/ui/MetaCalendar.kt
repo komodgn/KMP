@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2026 komodgn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.komodgn.kmp.calendar.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -73,7 +88,7 @@ fun MetaCalendar(
 
                     Text(
                         text = "${currentMonth.name} $currentYear",
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.headlineSmall,
                     )
 
                     IconButton(onClick = {
@@ -102,11 +117,14 @@ fun MetaCalendar(
             val initialPage = 500
             val pagerState = rememberPagerState(
                 initialPage = initialPage,
-                pageCount = { 1000 }
+                pageCount = { 1000 },
             )
 
             val (headerYear, headerMonth) = CalendarEngine().calculateYearMonthFromPage(
-                pagerState.currentPage, initialPage, initialYear, initialMonth,
+                pagerState.currentPage,
+                initialPage,
+                initialYear,
+                initialMonth,
             )
 
             Column(modifier.padding(16.dp)) {
@@ -125,10 +143,13 @@ fun MetaCalendar(
 
                 HorizontalPager(
                     state = pagerState,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) { page ->
                     val (displayYear, displayMonth) = CalendarEngine().calculateYearMonthFromPage(
-                        page, initialPage, initialYear, initialMonth,
+                        page,
+                        initialPage,
+                        initialYear,
+                        initialMonth,
                     )
 
                     val displayDays = remember(displayYear, displayMonth) {
