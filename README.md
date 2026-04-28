@@ -1,5 +1,6 @@
 # Calendar UI
-[![](https://jitpack.io/v/komodgn/kmp.svg)](https://jitpack.io/#komodgn/kmp)  
+[![](https://jitpack.io/v/komodgn/kmp.svg)](https://jitpack.io/#komodgn/kmp) ![Minimum SDK: 26](https://img.shields.io/badge/Minimum%20SDK-30-yellow)
+<a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-purple.svg"/></a>   
 
 ### Setup
 Add the dependency below to your module's build.gradle.kts file.
@@ -102,7 +103,4 @@ MetaCalendar(
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
 [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
-
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [YouTrack](https://youtrack.jetbrains.com/newIssue?project=CMP).
+[Kotlin/Wasm](https://kotl.in/wasm/).
