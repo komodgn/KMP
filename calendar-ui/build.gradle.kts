@@ -101,6 +101,7 @@ kotlin {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.components.resources)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.components.uiToolingPreview)
 
                 api(project(":calendar-core"))
             }
@@ -138,7 +139,6 @@ kotlin {
             }
         }
     }
-
 }
 
 publishing {

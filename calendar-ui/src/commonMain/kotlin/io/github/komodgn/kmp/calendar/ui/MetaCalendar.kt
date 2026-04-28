@@ -46,6 +46,7 @@ import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.number
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MetaCalendar(
@@ -55,12 +56,17 @@ fun MetaCalendar(
     initialMonth: Month,
     onDayClick: (LocalDate) -> Unit = {},
     onHeaderClick: (year: Int, month: Month) -> Unit = { _, _ -> },
+    options: CalendarOptions = CalendarOptions(),
 ) {
     var currentYear by remember { mutableStateOf(initialYear) }
     var currentMonth by remember { mutableStateOf(initialMonth) }
 
-    val days = remember(currentYear, currentMonth) {
-        CalendarEngine().getDaysInMonth(currentYear, currentMonth)
+    val days = remember(currentYear, currentMonth, options.showAdjacentMonths) {
+        CalendarEngine().getCalendarDates(
+            year = currentYear,
+            month = currentMonth,
+            showAdjacentMonths = options.showAdjacentMonths,
+        )
     }
 
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
@@ -117,8 +123,10 @@ fun MetaCalendar(
 
                 CalendarMonthSheet(
                     days = days,
+                    currentMonth = currentMonth,
                     selectedDate = selectedDate,
                     onDayClick = handleDayClick,
+                    options = options,
                 )
             }
         }
@@ -169,17 +177,34 @@ fun MetaCalendar(
                         initialMonth,
                     )
 
-                    val displayDays = remember(displayYear, displayMonth) {
-                        CalendarEngine().getDaysInMonth(displayYear, displayMonth)
+                    val displayDays = remember(displayYear, displayMonth, options.showAdjacentMonths) {
+                        CalendarEngine().getCalendarDates(
+                            year = displayYear,
+                            month = displayMonth,
+                            showAdjacentMonths = options.showAdjacentMonths,
+                        )
                     }
 
                     CalendarMonthSheet(
                         days = displayDays,
+                        currentMonth = displayMonth,
                         selectedDate = selectedDate,
                         onDayClick = handleDayClick,
+                        options = options,
                     )
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun MetaCalendarPreview() {
+    MaterialTheme {
+        MetaCalendar(
+            initialYear = 2026,
+            initialMonth = Month.APRIL,
+        )
     }
 }
