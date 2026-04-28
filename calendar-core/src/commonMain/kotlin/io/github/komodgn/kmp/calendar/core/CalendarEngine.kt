@@ -26,18 +26,50 @@ fun Month.length(isLeapYear: Boolean): Int = when (this) {
     else -> 31
 }
 
+internal fun Month.previous(year: Int): Pair<Int, Month> = if (this == Month.JANUARY) {
+    (year - 1) to Month.DECEMBER
+} else {
+    year to Month(this.number - 1)
+}
+
+internal fun Month.next(year: Int): Pair<Int, Month> = if (this == Month.DECEMBER) {
+    (year + 1) to Month.JANUARY
+} else {
+    year to Month(this.number + 1)
+}
+
+internal fun Int.isLeapYear() = (this % 4 == 0 && this % 100 != 0) || (this % 400 == 0)
+
+private const val CALENDAR_GRID_SIZE = 42
+
 class CalendarEngine {
-    fun getDaysInMonth(year: Int, month: Month): List<LocalDate?> {
-        val firstDayOfMonth = LocalDate(year, month, 1)
-        val daysInMonth = firstDayOfMonth.month.length(isLeapYear(year))
-        val firstDayOfWeek = firstDayOfMonth.dayOfWeek.isoDayNumber
 
+    fun getCalendarDates(year: Int, month: Month, showAdjacentMonths: Boolean): List<LocalDate?> {
         val days = mutableListOf<LocalDate?>()
+        val firstDayOfMonth = LocalDate(year, month, 1)
+        val firstDayOfWeek = firstDayOfMonth.dayOfWeek.isoDayNumber % 7
 
-        repeat(firstDayOfWeek % 7) { days.add(null) }
+        if (showAdjacentMonths) {
+            val (prevYear, prevMonth) = month.previous(year)
+            val prevMonthLen = prevMonth.length(prevYear.isLeapYear())
+            for (day in (prevMonthLen - firstDayOfWeek + 1)..prevMonthLen) {
+                days.add(LocalDate(prevYear, prevMonth, day))
+            }
+        } else {
+            repeat(firstDayOfWeek) { days.add(null) }
+        }
 
-        for (i in 1..daysInMonth) {
-            days.add(LocalDate(year, month, i))
+        val daysInMonth = month.length(year.isLeapYear())
+        for (day in 1..daysInMonth) {
+            days.add(LocalDate(year, month, day))
+        }
+
+        if (showAdjacentMonths) {
+            val (nextYear, nextMonth) = month.next(year)
+            val remainingSlots = CALENDAR_GRID_SIZE - days.size
+            for (day in 1..remainingSlots) {
+                days.add(LocalDate(nextYear, nextMonth, day))
+            }
         }
 
         return days
@@ -49,15 +81,11 @@ class CalendarEngine {
         initialYear: Int,
         initialMonth: Month,
     ): Pair<Int, Month> {
-        val diff = page - initialPage
-        val totalMonths = (initialYear * 12 + (initialMonth.number - 1)) + diff
+        val totalMonths = (initialYear * 12 + (initialMonth.number - 1)) + (page - initialPage)
 
         val year = if (totalMonths >= 0) totalMonths / 12 else (totalMonths - 11) / 12
         val monthIndex = ((totalMonths % 12) + 12) % 12
-        val month = Month(monthIndex + 1)
 
-        return year to month
+        return year to Month(monthIndex + 1)
     }
-
-    private fun isLeapYear(year: Int) = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
 }
