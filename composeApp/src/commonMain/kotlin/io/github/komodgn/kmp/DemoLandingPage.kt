@@ -19,6 +19,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,6 +58,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
+import io.github.komodgn.kmp.calendar.ui.CalendarOptions
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.github
@@ -68,6 +71,7 @@ fun DemoLandingPage(
     onDayClick: (LocalDate) -> Unit,
     onHeaderClick: (year: Int, month: Month) -> Unit = { _, _ -> },
 ) {
+    var showAdjacent by remember { mutableStateOf(true) }
     var selectedMode by remember { mutableStateOf(CalendarScrollOrientation.Horizontal) }
     val uriHandler = LocalUriHandler.current
 
@@ -139,7 +143,7 @@ fun DemoLandingPage(
 
         item {
             SingleChoiceSegmentedButtonRow(
-                modifier = Modifier.padding(bottom = 10.dp),
+                modifier = Modifier.padding(bottom = 5.dp),
             ) {
                 CalendarScrollOrientation.entries.forEachIndexed { index, mode ->
                     val activeColor = getModeColor(mode)
@@ -170,6 +174,30 @@ fun DemoLandingPage(
                 color = getModeColor(selectedMode).copy(alpha = 0.8f),
             )
             Spacer(modifier = Modifier.height(16.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(CardBackground.copy(alpha = 0.5f))
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clickable { showAdjacent = !showAdjacent },
+            ) {
+                Switch(
+                    checked = showAdjacent,
+                    onCheckedChange = { showAdjacent = it },
+                    colors = androidx.compose.material3.SwitchDefaults.colors(
+                        checkedThumbColor = NeonGreen,
+                        checkedTrackColor = NeonGreen.copy(alpha = 0.3f),
+                    ),
+                )
+                Text(
+                    text = "Show Adjacent Months",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (showAdjacent) Color.White else Color.White.copy(alpha = 0.5f),
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
         }
 
         item {
@@ -189,6 +217,7 @@ fun DemoLandingPage(
                     initialMonth = Month.APRIL,
                     onDayClick = onDayClick,
                     onHeaderClick = onHeaderClick,
+                    options = CalendarOptions(showAdjacentMonths = showAdjacent),
                 )
             }
         }

@@ -34,11 +34,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Month
 
 @Composable
 fun CalendarMonthSheet(
     days: List<LocalDate?>,
+    currentMonth: Month,
     selectedDate: LocalDate?,
+    options: CalendarOptions,
     onDayClick: (LocalDate) -> Unit,
 ) {
     LazyVerticalGrid(
@@ -46,7 +49,10 @@ fun CalendarMonthSheet(
         modifier = Modifier.fillMaxWidth(),
     ) {
         items(days) { date ->
+            val isCurrentMonth = date?.month == currentMonth
             val isSelected = date != null && date == selectedDate
+
+            val contentAlpha = if (isCurrentMonth) 1f else options.adjacentMonthAlpha
 
             Box(
                 modifier = Modifier
@@ -67,7 +73,14 @@ fun CalendarMonthSheet(
                 ) {
                     Text(
                         text = date?.dayOfMonth?.toString() ?: "",
-                        color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurface,
+                        color = (
+                            if (isSelected) {
+                                MaterialTheme.colorScheme.onPrimaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.onSurface
+                            }
+                            )
+                            .copy(alpha = contentAlpha),
                     )
                 }
             }
