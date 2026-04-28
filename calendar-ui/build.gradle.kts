@@ -145,7 +145,7 @@ publishing {
     publications {
         withType<MavenPublication> {
             groupId = "io.github.komodgn"
-            version = "0.4.0"
+            version = "0.5.0"
         }
     }
 }
