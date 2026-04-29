@@ -56,7 +56,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,6 +70,7 @@ import io.github.komodgn.kmp.calendar.ui.CalendarOptions
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
 import io.github.komodgn.kmp.component.CalendarControlSection
 import io.github.komodgn.kmp.component.SideNavigationRail
+import io.github.komodgn.kmp.util.generateCalendarCode
 import kmp.composeapp.generated.resources.Res
 import kmp.composeapp.generated.resources.github
 import kotlinx.datetime.LocalDate
@@ -83,7 +87,16 @@ fun DemoLandingPage(
 
         var showAdjacent by remember { mutableStateOf(true) }
         var selectedMode by remember { mutableStateOf(CalendarScrollOrientation.Horizontal) }
+
+        val code = generateCalendarCode(
+            selectedMode,
+            showAdjacent,
+            2026,
+            Month.APRIL,
+        )
+        val glowColor = getModeColor(selectedMode)
         val uriHandler = LocalUriHandler.current
+        val clipboardManager = LocalClipboardManager.current
 
         if (wideScreen) {
             Row(
@@ -129,9 +142,51 @@ fun DemoLandingPage(
                             onAdjacentChange = { showAdjacent = it },
                         )
                     }
+
+                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.Bottom,
+                        ) {
+                            Text(
+                                "Code Snippet",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+
+                            Text(
+                                text = "Copy",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .clip(RoundedCornerShape(4.dp))
+                                    .clickable {
+                                        clipboardManager.setText(
+                                            AnnotatedString(
+                                                code,
+                                            ),
+                                        )
+                                    }
+                                    .padding(horizontal = 8.dp, vertical = 2.dp),
+                            )
+                        }
+
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.Black.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+                                .padding(16.dp),
+                        ) {
+                            Text(
+                                text = code,
+                                fontFamily = FontFamily.Monospace,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                    }
                 }
 
-                val glowColor = getModeColor(selectedMode)
                 Box(
                     modifier = Modifier
                         .weight(1.2f)
