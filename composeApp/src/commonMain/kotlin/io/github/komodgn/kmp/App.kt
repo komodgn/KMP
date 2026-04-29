@@ -67,7 +67,7 @@ fun App() {
     }
 }
 
-@Preview(widthDp = 1000)
+@Preview(widthDp = 1700)
 @Composable
 private fun AppWidePreview() {
     MaterialTheme(
