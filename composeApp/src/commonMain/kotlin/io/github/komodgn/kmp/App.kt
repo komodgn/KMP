@@ -67,9 +67,9 @@ fun App() {
     }
 }
 
-@Preview
+@Preview(widthDp = 1000)
 @Composable
-private fun AppPreview() {
+private fun AppWidePreview() {
     MaterialTheme(
         colorScheme = CustomColorScheme,
     ) {
