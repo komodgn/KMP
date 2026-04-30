@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.komodgn.kmp.calendar.ui
+package io.github.komodgn.kmp.calendar.ui.theme
 
-import androidx.compose.runtime.Composable
-import io.github.komodgn.kmp.calendar.ui.theme.CalendarColors
-import io.github.komodgn.kmp.calendar.ui.theme.CalendarDefaults
+import androidx.compose.ui.graphics.Color
 
-data class CalendarOptions(
-    val showAdjacentMonths: Boolean = true,
-    val colors: CalendarColors? = null,
-) {
-    @Composable
-    fun getColors(): CalendarColors = colors ?: CalendarDefaults.colors()
-}
+data class CalendarColors(
+    val containerColor: Color,
+    val headerTextColor: Color,
+    val headerIconTint: Color,
+    val weekHeaderTextColor: Color,
+    val dayTextColor: Color,
+    val selectedContainerColor: Color,
+    val selectedContentColor: Color,
+    val adjacentMonthAlpha: Float,
+)

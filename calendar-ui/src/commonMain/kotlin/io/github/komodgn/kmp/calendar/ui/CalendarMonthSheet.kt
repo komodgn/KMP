@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CalendarMonthSheet(
@@ -44,6 +45,8 @@ fun CalendarMonthSheet(
     options: CalendarOptions,
     onDayClick: (LocalDate) -> Unit,
 ) {
+    val calendarColors = options.getColors()
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(7),
         modifier = Modifier.fillMaxWidth(),
@@ -52,7 +55,7 @@ fun CalendarMonthSheet(
             val isCurrentMonth = date?.month == currentMonth
             val isSelected = date != null && date == selectedDate
 
-            val contentAlpha = if (isCurrentMonth) 1f else options.adjacentMonthAlpha
+            val contentAlpha = if (isCurrentMonth) 1f else calendarColors.adjacentMonthAlpha
 
             Box(
                 modifier = Modifier
@@ -65,7 +68,7 @@ fun CalendarMonthSheet(
                         .height(40.dp)
                         .aspectRatio(0.9f)
                         .clip(CircleShape)
-                        .background(if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Transparent)
+                        .background(if (isSelected) calendarColors.selectedContainerColor else Color.Transparent)
                         .clickable(enabled = date != null) {
                             if (date != null) onDayClick(date)
                         },
@@ -73,17 +76,18 @@ fun CalendarMonthSheet(
                 ) {
                     Text(
                         text = date?.dayOfMonth?.toString() ?: "",
-                        color = (
-                            if (isSelected) {
-                                MaterialTheme.colorScheme.onPrimaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.onSurface
-                            }
-                            )
-                            .copy(alpha = contentAlpha),
+                        color = (if (isSelected) calendarColors.selectedContentColor else calendarColors.dayTextColor).copy(alpha = contentAlpha),
                     )
                 }
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun CalendarMonthSheet() {
+    MaterialTheme {
+        CalendarMonthSheet()
     }
 }

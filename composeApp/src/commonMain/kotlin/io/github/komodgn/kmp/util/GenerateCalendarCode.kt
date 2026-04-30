@@ -23,6 +23,8 @@ internal fun generateCalendarCode(
     showAdjacent: Boolean,
     year: Int,
     month: Month,
+    containerColor: String = "Color.Transparent",
+    selectedColor: String = "glowColor"
 ): String = """
         MetaCalendar(
             scrollOrientation = CalendarScrollOrientation.${orientation.name},
@@ -30,6 +32,11 @@ internal fun generateCalendarCode(
             initialMonth = Month.${month.name},
             options = CalendarOptions(
                 showAdjacentMonths = $showAdjacent,
+                colors = CalendarDefaults.colors(
+                    containerColor = $containerColor,
+                    selectedContainerColor = $selectedColor.copy(alpha = 0.2f),
+                    selectedContentColor = $selectedColor, 
+                ),
             ),
         )
 """.trimIndent()

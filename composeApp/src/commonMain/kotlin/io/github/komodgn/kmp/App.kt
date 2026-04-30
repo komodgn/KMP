@@ -15,20 +15,29 @@
  */
 package io.github.komodgn.kmp
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import io.github.komodgn.kmp.component.SideNavigationRail
+import io.github.komodgn.kmp.page.CustomsPage
+import io.github.komodgn.kmp.page.DemoLandingPage
 import kotlinx.coroutines.launch
 
 @Composable
@@ -36,32 +45,49 @@ import kotlinx.coroutines.launch
 fun App() {
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    var currentRoute by remember { mutableStateOf("Home") }
 
     MaterialTheme(
         colorScheme = CustomColorScheme,
     ) {
-        Scaffold(
-            snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-            contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                DemoLandingPage(
-                    onDayClick = { date ->
-                        scope.launch {
-                            snackbarHostState.showSnackbar("$date")
+        BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+            val isWideScreen = maxWidth > 600.dp
+
+            Scaffold(
+                snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+                contentWindowInsets = WindowInsets(0, 0, 0, 0),
+            ) { innerPadding ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                ) {
+                    if (isWideScreen) {
+                        SideNavigationRail(
+                            modifier = Modifier.width(80.dp),
+                            selectedRoute = currentRoute,
+                            onRouteSelected = { currentRoute = it },
+                        )
+                    }
+
+                    Box(modifier = Modifier.weight(1f)) {
+                        when (currentRoute) {
+                            "Home" -> DemoLandingPage(
+                                isWideScreen = isWideScreen,
+                                onDayClick = { date ->
+                                    scope.launch { snackbarHostState.showSnackbar("$date") }
+                                },
+                                onHeaderClick = { year, month ->
+                                    scope.launch {
+                                        snackbarHostState.showSnackbar("Click the calendar header to trigger a custom event. $year $month")
+                                    }
+                                },
+                            )
+
+                            "Customs" -> CustomsPage()
                         }
-                    },
-                    onHeaderClick = { year, month ->
-                        scope.launch {
-                            snackbarHostState.showSnackbar("Click the calendar header to trigger a custom event. $year $month")
-                        }
-                    },
-                )
+                    }
+                }
             }
         }
     }
