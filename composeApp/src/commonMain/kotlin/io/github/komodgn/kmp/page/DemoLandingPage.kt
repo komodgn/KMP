@@ -67,7 +67,6 @@ import androidx.compose.ui.unit.sp
 import io.github.komodgn.kmp.CardBackground
 import io.github.komodgn.kmp.CustomColorScheme
 import io.github.komodgn.kmp.NeonGreen
-import io.github.komodgn.kmp.NeonSky
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 import io.github.komodgn.kmp.calendar.ui.CalendarOptions
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
@@ -375,7 +374,13 @@ fun DemoLandingPage(
                         initialMonth = Month.APRIL,
                         onDayClick = onDayClick,
                         onHeaderClick = onHeaderClick,
-                        options = CalendarOptions(showAdjacentMonths = showAdjacent),
+                        options = CalendarOptions(
+                            showAdjacentMonths = showAdjacent,
+                            colors = CalendarDefaults.colors(
+                                selectedContentColor = glowColor,
+                                selectedContainerColor = glowColor.copy(alpha = 0.2f),
+                            ),
+                        ),
                     )
                 }
             }
