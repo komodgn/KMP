@@ -64,6 +64,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.komodgn.kmp.AppConfig
 import io.github.komodgn.kmp.CardBackground
 import io.github.komodgn.kmp.CustomColorScheme
 import io.github.komodgn.kmp.NeonGreen
@@ -114,6 +115,11 @@ fun DemoLandingPage(
                 Column(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
+                    Text(
+                        text = "v${AppConfig.LIBRARY_VERSION}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                    )
                     Text(
                         text = "Editor & Preview",
                         style = MaterialTheme.typography.displayMedium,
@@ -295,6 +301,11 @@ fun DemoLandingPage(
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "v${AppConfig.LIBRARY_VERSION}",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
 
