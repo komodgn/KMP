@@ -75,6 +75,13 @@ fun MetaCalendar(
 
     var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
+    val initialPage = 500
+    val pagerState = if (scrollOrientation == CalendarScrollOrientation.Horizontal) {
+        rememberPagerState(initialPage = initialPage, pageCount = { 1000 })
+    } else {
+        null
+    }
+
     val handleDayClick: (LocalDate) -> Unit = { date ->
         selectedDate = date
         onDayClick(date)
@@ -144,17 +151,14 @@ fun MetaCalendar(
                     }
 
                     CalendarScrollOrientation.Horizontal -> {
-                        val initialPage = 500
-                        val pagerState = rememberPagerState(
-                            initialPage = initialPage,
-                            pageCount = { 1000 },
-                        )
-                        val (headerYear, headerMonth) = CalendarEngine().calculateYearMonthFromPage(
-                            pagerState.currentPage,
-                            initialPage,
-                            initialYear,
-                            initialMonth,
-                        )
+                        val (headerYear, headerMonth) = remember(pagerState!!.currentPage) {
+                            CalendarEngine().calculateYearMonthFromPage(
+                                pagerState.currentPage,
+                                initialPage,
+                                initialYear,
+                                initialMonth,
+                            )
+                        }
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -191,14 +195,8 @@ fun MetaCalendar(
                 }
 
                 CalendarScrollOrientation.Horizontal -> {
-                    val initialPage = 500
-                    val pagerState = rememberPagerState(
-                        initialPage = initialPage,
-                        pageCount = { 1000 },
-                    )
-
                     HorizontalPager(
-                        state = pagerState,
+                        state = pagerState!!,
                         modifier = Modifier.fillMaxWidth(),
                     ) { page ->
                         val (displayYear, displayMonth) = CalendarEngine().calculateYearMonthFromPage(
