@@ -48,7 +48,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,6 +71,8 @@ import io.github.komodgn.kmp.NeonGreen
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 import io.github.komodgn.kmp.calendar.ui.CalendarOptions
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
+import io.github.komodgn.kmp.calendar.ui.noRippleClickable
+import io.github.komodgn.kmp.calendar.ui.rememberCalendarState
 import io.github.komodgn.kmp.calendar.ui.theme.CalendarDefaults
 import io.github.komodgn.kmp.component.CalendarControlSection
 import io.github.komodgn.kmp.getModeColor
@@ -87,17 +89,17 @@ fun DemoLandingPage(
     onDayClick: (LocalDate) -> Unit,
     onHeaderClick: (year: Int, month: Month) -> Unit = { _, _ -> },
 ) {
-    var showAdjacent by remember { mutableStateOf(true) }
-    var selectedMode by remember { mutableStateOf(CalendarScrollOrientation.Horizontal) }
+    var showAdjacent by rememberSaveable { mutableStateOf(true) }
+    var selectedMode by rememberSaveable { mutableStateOf(CalendarScrollOrientation.Horizontal) }
 
     val code = generateCalendarCode(
         selectedMode,
         showAdjacent,
-        2026,
-        Month.APRIL,
     )
     val glowColor = getModeColor(selectedMode)
     val clipboardManager = LocalClipboardManager.current
+
+    val calendarState = rememberCalendarState(2026, Month.APRIL, selectedMode)
 
     if (isWideScreen) {
         Row(
@@ -219,9 +221,7 @@ fun DemoLandingPage(
                 ) {
                     MetaCalendar(
                         modifier = Modifier.fillMaxSize().padding(16.dp),
-                        scrollOrientation = selectedMode,
-                        initialYear = 2026,
-                        initialMonth = Month.APRIL,
+                        state = calendarState,
                         onDayClick = onDayClick,
                         onHeaderClick = onHeaderClick,
                         options = CalendarOptions(
@@ -349,7 +349,7 @@ fun DemoLandingPage(
                         .clip(RoundedCornerShape(16.dp))
                         .background(CardBackground.copy(alpha = 0.5f))
                         .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable { showAdjacent = !showAdjacent },
+                        .noRippleClickable { showAdjacent = !showAdjacent },
                 ) {
                     Switch(
                         checked = showAdjacent,
@@ -380,9 +380,7 @@ fun DemoLandingPage(
                 ) {
                     MetaCalendar(
                         modifier = Modifier.fillMaxSize().padding(16.dp),
-                        scrollOrientation = selectedMode,
-                        initialYear = 2026,
-                        initialMonth = Month.APRIL,
+                        state = calendarState,
                         onDayClick = onDayClick,
                         onHeaderClick = onHeaderClick,
                         options = CalendarOptions(

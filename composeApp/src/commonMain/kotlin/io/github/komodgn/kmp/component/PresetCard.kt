@@ -36,6 +36,7 @@ import io.github.komodgn.kmp.CardBackground
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 import io.github.komodgn.kmp.calendar.ui.CalendarOptions
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
+import io.github.komodgn.kmp.calendar.ui.rememberCalendarState
 import io.github.komodgn.kmp.calendar.ui.theme.CalendarDefaults
 import kotlinx.datetime.Month
 
@@ -46,6 +47,13 @@ fun PresetCard(
     scrollMode: String,
     backgroundContent: @Composable () -> Unit = { Box(Modifier.fillMaxSize().background(Color.Transparent)) },
 ) {
+    val orientation = if (scrollMode == "Horizontal") {
+        CalendarScrollOrientation.Horizontal
+    } else {
+        CalendarScrollOrientation.None
+    }
+    val calendarState = rememberCalendarState(2026, Month.APRIL, orientation)
+
     Column(
         modifier = Modifier
             .width(350.dp)
@@ -64,13 +72,7 @@ fun PresetCard(
         ) {
             backgroundContent()
             MetaCalendar(
-                initialYear = 2026,
-                initialMonth = Month.APRIL,
-                scrollOrientation = if (scrollMode == "Horizontal") {
-                    CalendarScrollOrientation.Horizontal
-                } else {
-                    CalendarScrollOrientation.None
-                },
+                state = calendarState,
                 options = CalendarOptions(
                     colors = CalendarDefaults.colors(
                         selectedContainerColor = color.copy(0.7f),

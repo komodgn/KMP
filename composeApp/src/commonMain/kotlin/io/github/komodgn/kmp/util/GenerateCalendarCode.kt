@@ -16,20 +16,21 @@
 package io.github.komodgn.kmp.util
 
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
-import kotlinx.datetime.Month
 
 internal fun generateCalendarCode(
     orientation: CalendarScrollOrientation,
     showAdjacent: Boolean,
-    year: Int,
-    month: Month,
     containerColor: String = "Color.Transparent",
-    selectedColor: String = "glowColor"
+    selectedColor: String = "glowColor",
 ): String = """
+        val calendarState = rememberCalendarState(
+            initialYear = 2026,
+            initialMonth = Month.APRIL,
+            scrollOrientation = CalendarScrollOrientation.${orientation.name}
+        )
+    
         MetaCalendar(
-            scrollOrientation = CalendarScrollOrientation.${orientation.name},
-            initialYear = $year,
-            initialMonth = Month.${month.name},
+            state = calendarState,
             options = CalendarOptions(
                 showAdjacentMonths = $showAdjacent,
                 colors = CalendarDefaults.colors(
