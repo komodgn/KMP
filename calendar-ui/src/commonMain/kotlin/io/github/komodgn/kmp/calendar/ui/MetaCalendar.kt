@@ -15,8 +15,6 @@
  */
 package io.github.komodgn.kmp.calendar.ui
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,10 +34,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -47,44 +43,37 @@ import io.github.komodgn.kmp.calendar.core.CalendarEngine
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
-import kotlinx.datetime.number
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun MetaCalendar(
     modifier: Modifier = Modifier,
-    scrollOrientation: CalendarScrollOrientation = CalendarScrollOrientation.None,
-    initialYear: Int,
-    initialMonth: Month,
+    state: CalendarState = rememberCalendarState(),
     onDayClick: (LocalDate) -> Unit = {},
     onHeaderClick: (year: Int, month: Month) -> Unit = { _, _ -> },
     options: CalendarOptions = CalendarOptions(),
 ) {
     val calendarColors = options.getColors()
 
-    var currentYear by remember { mutableStateOf(initialYear) }
-    var currentMonth by remember { mutableStateOf(initialMonth) }
-
-    val days = remember(currentYear, currentMonth, options.showAdjacentMonths) {
+    val days = remember(state.currentYear, state.currentMonth, options.showAdjacentMonths) {
         CalendarEngine().getCalendarDates(
-            year = currentYear,
-            month = currentMonth,
+            year = state.currentYear,
+            month = state.currentMonth,
             showAdjacentMonths = options.showAdjacentMonths,
         )
     }
 
-    var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
-
     val initialPage = 500
-    val pagerState = if (scrollOrientation == CalendarScrollOrientation.Horizontal) {
+    val pagerState = if (state.scrollOrientation == CalendarScrollOrientation.Horizontal) {
         rememberPagerState(initialPage = initialPage, pageCount = { 1000 })
     } else {
         null
     }
 
-    val handleDayClick: (LocalDate) -> Unit = { date ->
-        selectedDate = date
-        onDayClick(date)
+    if (state.scrollOrientation == CalendarScrollOrientation.Horizontal && pagerState != null) {
+        LaunchedEffect(pagerState.currentPage) {
+            state.updateDateFromPage(pagerState.currentPage, initialPage)
+        }
     }
 
     Surface(
@@ -93,103 +82,51 @@ fun MetaCalendar(
     ) {
         Column(Modifier.padding(16.dp)) {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                when (scrollOrientation) {
-                    CalendarScrollOrientation.None -> {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            IconButton(onClick = {
-                                if (currentMonth == Month.JANUARY) {
-                                    currentMonth = Month.DECEMBER
-                                    currentYear -= 1
-                                } else {
-                                    currentMonth = Month(currentMonth.number - 1)
-                                }
-                            }) {
-                                Icon(
-                                    Icons.Default.KeyboardArrowLeft,
-                                    contentDescription = "Previous Month",
-                                    tint = calendarColors.headerIconTint,
-                                )
-                            }
-
-                            Text(
-                                modifier = Modifier
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null,
-                                    ) {
-                                        onHeaderClick(currentYear, currentMonth)
-                                    },
-                                text = "${currentMonth.name} $currentYear",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = calendarColors.headerTextColor,
-                            )
-
-                            IconButton(onClick = {
-                                if (currentMonth == Month.DECEMBER) {
-                                    currentMonth = Month.JANUARY
-                                    currentYear += 1
-                                } else {
-                                    currentMonth = Month(currentMonth.number + 1)
-                                }
-                            }) {
-                                Icon(
-                                    Icons.Default.KeyboardArrowRight,
-                                    contentDescription = "Next Month",
-                                    tint = calendarColors.headerIconTint,
-                                )
-                            }
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = if (state.scrollOrientation == CalendarScrollOrientation.None) {
+                        Arrangement.SpaceBetween
+                    } else {
+                        Arrangement.Center
+                    },
+                ) {
+                    if (state.scrollOrientation == CalendarScrollOrientation.None) {
+                        IconButton(onClick = { state.moveToPreviousMonth() }) {
+                            Icon(Icons.Default.KeyboardArrowLeft, contentDescription = "Prev", tint = calendarColors.headerIconTint)
                         }
                     }
 
-                    CalendarScrollOrientation.Horizontal -> {
-                        val (headerYear, headerMonth) = remember(pagerState!!.currentPage) {
-                            CalendarEngine().calculateYearMonthFromPage(
-                                pagerState.currentPage,
-                                initialPage,
-                                initialYear,
-                                initialMonth,
-                            )
-                        }
+                    Text(
+                        modifier = Modifier
+                            .noRippleClickable { onHeaderClick(state.currentYear, state.currentMonth) },
+                        text = "${state.currentMonth.name} ${state.currentYear}",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = calendarColors.headerTextColor,
+                    )
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                modifier = Modifier
-                                    .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null,
-                                    ) {
-                                        onHeaderClick(headerYear, headerMonth)
-                                    },
-                                text = "${headerMonth.name} $headerYear",
-                                style = MaterialTheme.typography.headlineSmall,
-                                color = calendarColors.headerTextColor,
-                            )
+                    if (state.scrollOrientation == CalendarScrollOrientation.None) {
+                        IconButton(onClick = { state.moveToNextMonth() }) {
+                            Icon(Icons.Default.KeyboardArrowRight, contentDescription = "Next", tint = calendarColors.headerIconTint)
                         }
                     }
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            when (scrollOrientation) {
+            when (state.scrollOrientation) {
                 CalendarScrollOrientation.None -> {
                     CalendarMonthSheet(
                         days = days,
-                        currentMonth = currentMonth,
-                        selectedDate = selectedDate,
-                        onDayClick = handleDayClick,
+                        currentMonth = state.currentMonth,
+                        selectedDate = state.selectedDate,
+                        onDayClick = { date ->
+                            state.selectDate(date)
+                            onDayClick(date)
+                        },
                         options = options,
                     )
                 }
@@ -202,8 +139,8 @@ fun MetaCalendar(
                         val (displayYear, displayMonth) = CalendarEngine().calculateYearMonthFromPage(
                             page,
                             initialPage,
-                            initialYear,
-                            initialMonth,
+                            state.initialYear,
+                            state.initialMonth,
                         )
 
                         val displayDays =
@@ -218,8 +155,11 @@ fun MetaCalendar(
                         CalendarMonthSheet(
                             days = displayDays,
                             currentMonth = displayMonth,
-                            selectedDate = selectedDate,
-                            onDayClick = handleDayClick,
+                            selectedDate = state.selectedDate,
+                            onDayClick = { date ->
+                                state.selectDate(date)
+                                onDayClick(date)
+                            },
                             options = options,
                         )
                     }
@@ -234,8 +174,7 @@ fun MetaCalendar(
 private fun MetaCalendarPreview() {
     MaterialTheme {
         MetaCalendar(
-            initialYear = 2026,
-            initialMonth = Month.APRIL,
+            state = rememberCalendarState(2026, Month.APRIL),
         )
     }
 }
