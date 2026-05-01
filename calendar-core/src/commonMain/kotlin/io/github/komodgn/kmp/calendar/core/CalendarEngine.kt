@@ -20,26 +20,6 @@ import kotlinx.datetime.Month
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
 
-fun Month.length(isLeapYear: Boolean): Int = when (this) {
-    Month.FEBRUARY -> if (isLeapYear) 29 else 28
-    Month.APRIL, Month.JUNE, Month.SEPTEMBER, Month.NOVEMBER -> 30
-    else -> 31
-}
-
-internal fun Month.previous(year: Int): Pair<Int, Month> = if (this == Month.JANUARY) {
-    (year - 1) to Month.DECEMBER
-} else {
-    year to Month(this.number - 1)
-}
-
-internal fun Month.next(year: Int): Pair<Int, Month> = if (this == Month.DECEMBER) {
-    (year + 1) to Month.JANUARY
-} else {
-    year to Month(this.number + 1)
-}
-
-internal fun Int.isLeapYear() = (this % 4 == 0 && this % 100 != 0) || (this % 400 == 0)
-
 private const val CALENDAR_GRID_SIZE = 42
 
 class CalendarEngine {

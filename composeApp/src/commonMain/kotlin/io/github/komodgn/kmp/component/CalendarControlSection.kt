@@ -15,8 +15,6 @@
  */
 package io.github.komodgn.kmp.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +30,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,8 +37,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.github.komodgn.kmp.NeonGreen
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
+import io.github.komodgn.kmp.calendar.ui.noRippleClickable
 import io.github.komodgn.kmp.getModeColor
 
 @Composable
@@ -101,10 +98,7 @@ internal fun CalendarControlSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                ) {
+                .noRippleClickable {
                     onAdjacentChange(!showAdjacent)
                 }
                 .padding(vertical = 8.dp),
