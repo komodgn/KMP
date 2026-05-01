@@ -19,7 +19,7 @@ runner = "1.7.0"
 core = "1.7.0"
 spotless = "8.1.0"
 buildkonfig = "0.18.0"
-calendar = "0.7.0"
+calendar = "0.7.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
