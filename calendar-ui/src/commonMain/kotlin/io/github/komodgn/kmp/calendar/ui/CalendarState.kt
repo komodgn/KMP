@@ -83,6 +83,7 @@ fun rememberCalendarState(
     initialMonth: Month = Month.APRIL,
     scrollOrientation: CalendarScrollOrientation = CalendarScrollOrientation.None,
 ): CalendarState = rememberSaveable(
+    scrollOrientation,
     saver = Saver(
         save = { listOf(it.currentYear, it.currentMonth.number, it.selectedDate?.toString()) },
         restore = { value ->
