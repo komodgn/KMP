@@ -44,63 +44,35 @@ Load a simple calendar in your Compose Multiplatform screen:
 
 ```Kotlin
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
-import kotlinx.datetime.Month
+import io.github.komodgn.kmp.calendar.ui.rememberCalendarState
+
+val calendarState = rememberCalendarState(2026, Month.APRIL)
 
 MetaCalendar(
-    initialYear = 2026,
-    initialMonth = Month.APRIL,
+    state = calendarState,
     onDayClick = { date ->
         // date is a kotlinx.datetime.LocalDate object
         println("Clicked date: ${date.dayOfMonth}")
-    }
+    },
 )
 ```
 
-### Handling Selection
-You can manage the selected date state and perform actions when a user picks a day:
+#### 1. Handling Selection
+- You can manage the selected date state and perform actions when a user picks a day:
 
 ```Kotlin
 var selectedDate by remember { mutableStateOf<LocalDate?>(null) }
 
 MetaCalendar(
-    initialYear = 2026,
-    initialMonth = Month.APRIL,
     onDayClick = { date ->
         selectedDate = date
         // Navigate or update UI based on selectedDate
-    }
+    },
 )
 ```
 
-### Scroll Orientation
-Supports scroll behaviors. **The default is `None` (Static).**
-```kotlin
-import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
+#### 2. Scroll Orientation
+- Supports scroll behaviors. **The default is `None` (Static).**
 
-MetaCalendar(
-    scrollOrientation = CalendarScrollOrientation.Horizontal,
-    initialYear = 2026,
-    initialMonth = Month.APRIL,
-    onDayClick = { /* ... */ }
-)
-```
-
-### Customization (Optional)
-Use Modifier to adjust the layout and look of your calendar:
-
-```Kotlin
-MetaCalendar(
-    modifier = Modifier
-        .fillMaxWidth()
-        .padding(16.dp)
-        .clip(RoundedCornerShape(12.dp)),
-    initialYear = 2026,
-    initialMonth = Month.MAY,
-    onDayClick = { /* Handle click */ }
-)
-```
----
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/).
+#### 3. Customization (Optional)
+- Use Modifier to adjust the layout and look of your calendar.
