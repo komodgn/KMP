@@ -1,0 +1,12 @@
+name: "✨ Feature Request"
+description: "Suggest a new idea or submit a feature implementation task."
+title: "[Feature] "
+labels: ["feature", "enhancement"]
+body:
+    - type: textarea
+      id: feature_summary
+      attributes:
+          label: "📝 Feature Summary"
+          description: "What is the goal of this feature?"
+      validations:
+          required: true

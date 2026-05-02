@@ -1,0 +1,20 @@
+name: "♻️ Refactor"
+description: "Improve code structure or performance without changing functionality."
+title: "[Refactor] "
+labels: ["refactor", "optimization"]
+body:
+    - type: textarea
+      id: refactor_summary
+      attributes:
+          label: "📝 Refactor Summary"
+          description: "What part of the code are you improving and why?"
+      validations:
+          required: true
+
+    - type: textarea
+      id: current_issue
+      attributes:
+          label: "📉 Current Problems"
+          description: "Explain why the current code needs refactoring (e.g., Technical debt, Performance issues)."
+      validations:
+          required: false

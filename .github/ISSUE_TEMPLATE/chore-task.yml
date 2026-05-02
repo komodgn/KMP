@@ -1,0 +1,12 @@
+name: "⚙️ Chore"
+description: "Maintenance tasks, dependency updates, or CI/CD configuration."
+title: "[Chore] "
+labels: ["chore", "dependencies"]
+body:
+    - type: textarea
+      id: chore_summary
+      attributes:
+          label: "📝 Chore Summary"
+          description: "Describe the maintenance task."
+      validations:
+          required: true
