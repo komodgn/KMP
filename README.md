@@ -1,8 +1,9 @@
-# Calendar UI
 [![](https://jitpack.io/v/komodgn/kmp.svg)](https://jitpack.io/#komodgn/kmp) ![Minimum SDK: 26](https://img.shields.io/badge/Minimum%20SDK-30-yellow)
-<a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-purple.svg"/></a>   
+<a href="https://opensource.org/licenses/Apache-2.0"><img alt="License" src="https://img.shields.io/badge/License-Apache%202.0-purple.svg"/></a>
 
-### Setup
+<img width="4541" height="1779" alt="Group 6 (1)" src="https://github.com/user-attachments/assets/3cd30984-990d-4dc1-831a-9dfead08d260" />  
+
+## Setup
 Add the dependency below to your module's build.gradle.kts file.
 
 1. Add Repository
@@ -39,7 +40,7 @@ dependencies {
 }
 ```
 
-### Usage
+## Usage
 Load a simple calendar in your Compose Multiplatform screen:
 
 ```Kotlin
@@ -56,7 +57,7 @@ MetaCalendar(
     },
 )
 ```
-
+## Features
 #### 1. Handling Selection
 - You can manage the selected date state and perform actions when a user picks a day:
 
