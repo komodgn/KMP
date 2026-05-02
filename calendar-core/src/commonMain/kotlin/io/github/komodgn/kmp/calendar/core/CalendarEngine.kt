@@ -15,10 +15,13 @@
  */
 package io.github.komodgn.kmp.calendar.core
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.isoDayNumber
 import kotlinx.datetime.number
+import kotlinx.datetime.todayIn
 
 private const val CALENDAR_GRID_SIZE = 42
 
@@ -67,5 +70,11 @@ class CalendarEngine {
         val monthIndex = ((totalMonths % 12) + 12) % 12
 
         return year to Month(monthIndex + 1)
+    }
+}
+
+object CalendarUtils {
+    fun now(): LocalDate {
+        return Clock.System.todayIn(TimeZone.currentSystemDefault())
     }
 }

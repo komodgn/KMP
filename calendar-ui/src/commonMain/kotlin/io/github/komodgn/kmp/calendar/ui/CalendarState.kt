@@ -23,12 +23,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import io.github.komodgn.kmp.calendar.core.CalendarEngine
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
+import io.github.komodgn.kmp.calendar.core.CalendarUtils
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.Clock
 import kotlinx.datetime.number
-import kotlinx.datetime.todayIn
 
 class CalendarState(
     val initialYear: Int,
@@ -82,8 +80,8 @@ class CalendarState(
 
 @Composable
 fun rememberCalendarState(
-    initialYear: Int = Clock.System.todayIn(TimeZone.currentSystemDefault()).year,
-    initialMonth: Month = Clock.System.todayIn(TimeZone.currentSystemDefault()).month,
+    initialYear: Int = CalendarUtils.now().year,
+    initialMonth: Month = CalendarUtils.now().month,
     scrollOrientation: CalendarScrollOrientation = CalendarScrollOrientation.None,
 ): CalendarState = rememberSaveable(
     scrollOrientation,
