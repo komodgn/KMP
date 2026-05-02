@@ -52,7 +52,7 @@ fun PresetCard(
     } else {
         CalendarScrollOrientation.None
     }
-    val calendarState = rememberCalendarState(2026, Month.APRIL, orientation)
+    val calendarState = rememberCalendarState(scrollOrientation =  orientation)
 
     Column(
         modifier = Modifier
