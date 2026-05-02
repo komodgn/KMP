@@ -99,7 +99,7 @@ fun DemoLandingPage(
     val glowColor = getModeColor(selectedMode)
     val clipboardManager = LocalClipboardManager.current
 
-    val calendarState = rememberCalendarState(2026, Month.APRIL, selectedMode)
+    val calendarState = rememberCalendarState(scrollOrientation = selectedMode)
 
     if (isWideScreen) {
         Row(

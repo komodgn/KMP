@@ -25,7 +25,10 @@ import io.github.komodgn.kmp.calendar.core.CalendarEngine
 import io.github.komodgn.kmp.calendar.core.CalendarScrollOrientation
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.Clock
 import kotlinx.datetime.number
+import kotlinx.datetime.todayIn
 
 class CalendarState(
     val initialYear: Int,
@@ -79,8 +82,8 @@ class CalendarState(
 
 @Composable
 fun rememberCalendarState(
-    initialYear: Int = 2026,
-    initialMonth: Month = Month.APRIL,
+    initialYear: Int = Clock.System.todayIn(TimeZone.currentSystemDefault()).year,
+    initialMonth: Month = Clock.System.todayIn(TimeZone.currentSystemDefault()).month,
     scrollOrientation: CalendarScrollOrientation = CalendarScrollOrientation.None,
 ): CalendarState = rememberSaveable(
     scrollOrientation,

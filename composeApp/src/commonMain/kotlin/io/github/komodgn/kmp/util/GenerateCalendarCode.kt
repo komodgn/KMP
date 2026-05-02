@@ -24,9 +24,7 @@ internal fun generateCalendarCode(
     selectedColor: String = "glowColor",
 ): String = """
         val calendarState = rememberCalendarState(
-            initialYear = 2026,
-            initialMonth = Month.APRIL,
-            scrollOrientation = CalendarScrollOrientation.${orientation.name}
+            scrollOrientation = CalendarScrollOrientation.${orientation.name},
         )
     
         MetaCalendar(
