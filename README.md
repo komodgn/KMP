@@ -47,7 +47,7 @@ Load a simple calendar in your Compose Multiplatform screen:
 import io.github.komodgn.kmp.calendar.ui.MetaCalendar
 import io.github.komodgn.kmp.calendar.ui.rememberCalendarState
 
-val calendarState = rememberCalendarState(2026, Month.APRIL)
+val calendarState = rememberCalendarState(scrollOrientation = CalendarScrollOrientation.Horizontal)
 
 MetaCalendar(
     state = calendarState,
