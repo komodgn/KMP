@@ -58,12 +58,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.komodgn.codeview.compose.CodeView
+import io.github.komodgn.codeview.core.CodeLanguage
 import io.github.komodgn.kmp.AppConfig
 import io.github.komodgn.kmp.CardBackground
 import io.github.komodgn.kmp.CustomColorScheme
@@ -178,18 +179,10 @@ fun DemoLandingPage(
                         )
                     }
 
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Color.Black.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
-                            .padding(16.dp),
-                    ) {
-                        Text(
-                            text = code,
-                            fontFamily = FontFamily.Monospace,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
+                    CodeView(
+                        code = code,
+                        language = CodeLanguage.KOTLIN,
+                    )
                 }
             }
 

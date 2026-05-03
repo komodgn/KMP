@@ -69,6 +69,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            implementation(libs.compose.codeview)
+            implementation(libs.compose.codeview.core)
             implementation(project(":calendar-ui"))
         }
         commonTest.dependencies {
